@@ -2,12 +2,17 @@
 title: 'Tutorial 1: Exploratory analysis of pharmacogenomic data'
 author: "Alejandro Reyes"
 output:
-  pdf_document: default
   html_document: default
+  pdf_document: default
 ---
 
 ```{r echo=FALSE}
 knitr::opts_chunk$set(cache=FALSE)
+```
+
+```{r Example}
+x <- rnorm(100,0,1)
+plot(x)
 ```
 
 ## Introduction
@@ -59,7 +64,7 @@ tapply( pharmacoData$doseID, pharmacoData$study, function(x){
 One of the first things data scientists do when digging into new data
 is to explore their distributions.  Histograms visualize the data
 distributions and can also point us towards appropiate statistical
-models. The code belowtransforms the data into a logarithmic scale and
+models. The code below transforms the data into a logarithmic scale and
 plots a histogram separately for each study. Based on these plots,
 which study would you say has the most consistent experimental
 protocol?
@@ -68,7 +73,7 @@ protocol?
 library(ggplot2)
 library(cowplot)
 ggplot( pharmacoData, aes( log2(concentration) ) ) +
-    geom_histogram(fill = "white", colour="black") +
+    geom_histogram(fill = "white", colour = "black") +
     facet_wrap(~study)
 ```
 

@@ -19,8 +19,13 @@ The questions below will help guide you in your analyses and interpretation of r
 
 For each answer, include text by simply typing below the question. Include code in code blocks (include three back ticks at the start and end of each code block):
 
-```{r}
-#Your code goes here
+```{r Intro}
+
+require(PharmPlotter)
+library(PharmPlotter,devtools,ggplot)
+data("rawData", package = "PharmPlotter")
+exerciseData = rawData
+
 ```
 
 You may find it helpful to use the version control and code sharing system called GitHub to work together with your team so that all of you can edit the same document and keep track of its changes. Here is a [setup guide](https://github.com/datasciencelabs/2016/blob/master/lectures/git-and-github/setting-up-git.Rmd) and [brief introduction to Git and GitHub](https://github.com/datasciencelabs/2016/blob/master/lectures/git-and-github/version-control.Rmd) from another course. The mentors will be able to help if you run into problems. 
@@ -31,7 +36,28 @@ You may find it helpful to use the version control and code sharing system calle
 
 1. How many cell-lines are contained in the data?
 
+```{r Q1}
+#Finding out where the cell lines are stored in the data set
+head(exerciseData)
+#Finding different cell lines
+difCL = unique(exerciseData$cellLine)
+head(difCL)
+#Counting them
+length(difCL)
+
+```
+
 2. What drug concentrations were used in each study?
+
+```{r Q2}
+#Selecting unique concentrations from each study
+concCCLE = unique(subset(exerciseData, study == "CCLE", select = concentration))
+sort(concCCLE$concentration)
+concGDSC = unique(subset(exerciseData, study == "GDSC", select = concentration))
+sort(concGDSC$concentration)
+
+
+```
 
 3. Histograms, appart from telling how is the data
 distributed, can also make evident potential
@@ -39,11 +65,30 @@ problems with the data. Plot a histogram
 of drug viabilities. Does it look as one would
 expect from the description of the data?
 
+```{r Q3}
+#Making a histogram for each study
+ggplot(data = exerciseData, aes(viability)) + geom_histogram() + facet_wrap(~study)
+
+```
+
 4. How many viability data points are within the
 expected range according to the definition of viability (e.g. above 0 
 and below 100)? Try to come up with explanations about
 the values that are out of range. Are these due to technical
 issues? Biology?
+
+```{r Q4}
+#Dividing data in study subsets
+CCLEData = subset(exerciseData, study == "CCLE")
+CCLEData = subset(exerciseData, study == "GDSC")
+nrow(exerciseData[exerciseData$viability >= 0 & exerciseData$viability <= 100,])
+Caca = exerciseData[exerciseData$viability >= 0 & exerciseData$viability <= 100,]
+head(Caca)
+aggregate(Caca$viability,by = list(Caca$drug),FUN = nrow)
+
+#Defining the subset
+
+```
 
 5. Read the csv file containing the summarized data files. What kind
 of variables are in the data? What does each column represents?
