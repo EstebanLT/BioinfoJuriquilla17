@@ -78,27 +78,49 @@ the values that are out of range. Are these due to technical
 issues? Biology?
 
 ```{r Q4}
-#Dividing data in study subsets
-CCLEData = subset(exerciseData, study == "CCLE")
-CCLEData = subset(exerciseData, study == "GDSC")
+#Calculating the total number of observations with viability between 0 and 100
 nrow(exerciseData[exerciseData$viability >= 0 & exerciseData$viability <= 100,])
+#Calculating the number of observations with viability between 0 and 100 for each drug
+sum(tapply( exerciseData$viability, exerciseData$drug, function(x){
+        length( x[x >= 0 & x <= 100] )
+    }))
+#An alternative to do the same
+#First selecting the subset of all data whith viability from 0 to 100
 Caca = exerciseData[exerciseData$viability >= 0 & exerciseData$viability <= 100,]
-head(Caca)
-aggregate(Caca$viability,by = list(Caca$drug),FUN = nrow)
-
-#Defining the subset
+#Then calculating the total by drug
+sum(aggregate(Caca$viability,by = list(Caca$drug),FUN = length)$x)
 
 ```
 
 5. Read the csv file containing the summarized data files. What kind
-of variables are in the data? What does each column represents?
+of variables are in the data? What does each column represent?
 
-6. Plot a histogram of the viability scores separating the different drug
-doses. Are stronger drug concentrations consistent with lower viability scores?
+```{r}
+
+data("summarizedData", package = "PharmPlotter")
+SummData = summarizedData
+head(SummData)
+
+```
+
+6. Plot a histogram of the viability scores separating the different drug doses. Are stronger drug concentrations consistent with lower viability scores?
+
+```{r}
+
+ggplot(exerciseData, aes(viability)) + geom_histogram() + facet_wrap(~doseID)
+
+```
+
 
 ### Using Correlation Measures to Assess Replicability of Drug Response Studies
 
 1. Create a scatterplot for each drug comparing the AUC in GDSC and CCLE for all cell lines (hint: code from Tutorial 2 may help).
+
+```{r}
+
+
+
+```
 
 2. Calculate correlation coefficients of the AUC in GDSC and CCLE for each drug (hint: code from Tutorial 2 may help). 
 
